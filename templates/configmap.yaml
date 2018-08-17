@@ -1,0 +1,28 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "clickhouse.name" . }}-config
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ template "clickhouse.name" . }}
+data:
+  config.xml: {{ .Values.config_xml | quote }}
+  users.xml: {{ .Values.users_xml | quote }}
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "clickhouse.name" . }}-init
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ template "clickhouse.name" . }}
+data:
+  initdb.sql: {{ .Values.initdb_sql | quote }}
