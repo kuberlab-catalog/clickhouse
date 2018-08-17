@@ -24,21 +24,7 @@ resources:
     cpu: 1
     memory: 1Gi
 
-## Bootstrapping and ClickHouse server settings and links to configuration files
-initdb_args: ['--user=default', '--database=default', '--multiquery']
-initdb_sql: |
-  CREATE DATABASE IF NOT EXISTS test;
-  USE test;
-  CREATE TABLE IF NOT EXISTS test.Metrics
-  (
-      Name String,
-      PartitionDate Date DEFAULT toDate(Time),
-      Time DateTime,
-      Value Float32,
-      Dimensions Nested(
-      Key String,
-      Value Nullable(String))
-  ) ENGINE = MergeTree(PartitionDate, (Name, PartitionDate), 8192);
+## ClickHouse server configuration files
 config_xml: |
   <?xml version="1.0"?>
   <yandex>
