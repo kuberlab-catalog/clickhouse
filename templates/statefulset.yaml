@@ -13,6 +13,8 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  securityContext:
+    runAsUser: 0
   podManagementPolicy: OrderedReady
   replicas: {{ .Values.replicas }}
   selector:
