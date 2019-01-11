@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1beta1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ template "clickhouse.name" . }}
   labels:
@@ -33,7 +33,7 @@ spec:
       securityContext:
         runAsUser: 0
       containers:
-        - name: {{ template "clickhouse.name" . }}
+        - name: {{ template "clickhouse.name" . }}-db
           image: {{ .Values.image }}:{{ .Values.imageTag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
@@ -71,6 +71,31 @@ spec:
               mountPath: /var/lib/clickhouse/
             - name: config-volume
               mountPath: /etc/clickhouse-server/
+{{- if .Values.tabix.enabled }}
+        - name: {{ template "clickhouse.name" . }}-ui
+          image: {{ .Values.tabix.image }}:{{ .Values.tabix.imageTag }}
+          imagePullPolicy: {{ .Values.tabix.imagePullPolicy }}
+          ports:
+            - name: ui
+              containerPort: 80
+          livenessProbe:
+            timeoutSeconds: 1
+            initialDelaySeconds: 60
+            tcpSocket:
+              port: 80
+          readinessProbe:
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+            tcpSocket:
+              port: 80
+          resources:
+            requests:
+              cpu: {{ .Values.tabix.resources.requests.cpu }}
+              memory: {{ .Values.tabix.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.tabix.resources.limits.cpu }}
+              memory: {{ .Values.tabix.resources.limits.memory }}
+{{- end }}
       volumes:
         - name: clickhouse-data-volume
 {{- if .Values.persistence.enabled }}

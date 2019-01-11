@@ -49,6 +49,12 @@ spec:
       port: 9000
       targetPort: 9000
       protocol: TCP
+{{- if .Values.tabix.enabled }}
+    - name: ui
+      port: {{ .Values.tabix.service.port }}
+      targetPort: 80
+      protocol: TCP
+{{ end }}
   selector:
     app: {{ template "clickhouse.name" . }}
     release: {{ template "clickhouse.name" . }}

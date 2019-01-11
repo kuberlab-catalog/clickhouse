@@ -1,9 +1,3 @@
-## Pod Annotations
-# podAnnotations: {}
-
-## Statefulset annotations
-# annotations: {}
-
 ## Number of ClickHouse nodes
 replicas: 1
 
@@ -138,12 +132,16 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+  enable_https: false
+  clickhouse_host: clickhouse.domain.com
+  loghouse_host: loghouse.domain.com
+  tabix_host: tabix.domain.com
 
-## The storage volume used by each Pod in the StatefulSet. If a
+## The storage volume used by each Pod in the Deployment. If a
 ## persistentVolume is not enabled, the Pods will use `emptyDir` ephemeral
 ## local storage.
 persistence:
-  enabled: false
+  enabled: true
   # storageClass: default
   # accessMode: ReadWriteOnce
   # size: 10Gi
@@ -161,3 +159,24 @@ persistence:
 #   operator: 'Exists'
 #   value: 'logging'
 #   effect: 'NoSchedule'
+
+
+# Tabix
+tabix:
+  enabled: false
+  image: spoonest/clickhouse-tabix-web-client
+  imageTag: latest
+  imagePullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 80
+    annotations: {}
+    labels: {}
+    externalIPs: []
+  resources:
+    limits:
+      memory: 512Mi
+      cpu: 0.5
+    requests:
+      memory: 256Mi
+      cpu: 0.2

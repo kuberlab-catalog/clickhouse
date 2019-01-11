@@ -4,7 +4,7 @@
 Expand the name of the chart.
 */}}
 {{- define "clickhouse.name" -}}
-{{- printf "%s" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s" .Release.Name | trunc 60 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
