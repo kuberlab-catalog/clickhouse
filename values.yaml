@@ -13,10 +13,14 @@ imagePullPolicy: Always
 resources:
   limits:
     cpu: 1
-    memory: 1Gi
+    memory: 4Gi
   requests:
     cpu: 1
     memory: 1Gi
+
+## Start initialization job
+init:
+  enabled: false
 
 ## Bootstrapping and ClickHouse server settings and links to configuration files
 initdb_args: ['--user=default', '--database=default', '--multiquery']
@@ -159,7 +163,6 @@ persistence:
 #   operator: 'Exists'
 #   value: 'logging'
 #   effect: 'NoSchedule'
-
 
 # Tabix
 tabix:
